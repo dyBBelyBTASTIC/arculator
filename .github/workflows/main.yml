@@ -30,7 +30,7 @@ jobs:
             mingw-w64-x86_64-libpcap
             git
 
-      - name: Configure (CMake preset: msys2-mingw64)
+      - name: "Configure (CMake preset: msys2-mingw64)"
         run: cmake --preset msys2-mingw64
 
       - name: Build and install
