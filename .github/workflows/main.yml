@@ -1,0 +1,43 @@
+name: Windows Build (CMake + MSYS2)
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up MSYS2 (MinGW64)
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          location: C:\
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-libpcap
+            git
+
+      - name: Configure (CMake preset: msys2-mingw64)
+        run: cmake --preset msys2-mingw64
+
+      - name: Build and install
+        run: cmake --build build-mingw64 --target install
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: arculator-windows-build
+          path: install/
