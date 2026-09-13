@@ -261,26 +261,36 @@ void mainthread(LPVOID param)
 			}
 		}
 
-		if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END])
-		{
-			if (fullscreen)
-			{
-				mouse_capture_disable();
-				SDL_SetWindowFullscreen(sdl_main_window, 0);
-				SetMenu(ghwnd, menu);
+{
+    static int ctrlend_down = 0;
+    int ctrlend_now = (key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END];
 
-				fullscreen=0;
-				if (fullborders) updatewindowsize(800,600);
-				else             updatewindowsize(672,544);
-			}
-			else if (mousecapture)
-			{
-				ClipCursor(&oldclip);
-				mouse_capture_disable();
-				mousecapture = 0;
-				updatemips = 1;
-			}
-		}
+    if (ctrlend_now && !ctrlend_down)
+    {
+        if (fullscreen)
+        {
+            mouse_capture_disable();
+            SDL_SetWindowFullscreen(sdl_main_window, 0);
+            SetMenu(ghwnd, menu);
+
+            fullscreen=0;
+            if (fullborders) updatewindowsize(800,600);
+            else             updatewindowsize(672,544);
+        }
+        else if (mousecapture)
+        {
+            ClipCursor(&oldclip);
+            mouse_capture_disable();
+            mousecapture = 0;
+            updatemips = 1;
+        }
+        else
+        {
+            win_dofullscreen = 1;
+        }
+    }
+    ctrlend_down = ctrlend_now;
+}
 
 		if (updatemips)
 		{
