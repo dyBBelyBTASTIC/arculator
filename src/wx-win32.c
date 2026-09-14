@@ -286,9 +286,11 @@ void mainthread(LPVOID param)
 			static int altenter_down = 0;
 			int altenter_now = (key[KEY_ALT] || key[KEY_ALTGR]) && key[KEY_ENTER];
 
-			if (altenter_now && !altenter_down && !fullscreen)
+			if (altenter_now && !altenter_down)
 			{
-				win_dofullscreen = 1;
+				MessageBox(NULL, "Alt+Enter was detected!", "Diagnostic", MB_OK);
+				if (!fullscreen)
+					win_dofullscreen = 1;
 			}
 			altenter_down = altenter_now;
 		}
@@ -296,7 +298,7 @@ void mainthread(LPVOID param)
 		if (updatemips)
 		{
 			char s[80];
-			sprintf(s, "Arculator %s - %i%% - %s", VERSION_STRING, inssec, mousecapture ? "Press CTRL-END to release mouse" : "Click to capture mouse");
+			sprintf(s, "Arculator [TESTBUILD] %s - %i%% - %s", VERSION_STRING, inssec, mousecapture ? "Press CTRL-END to release mouse" : "Click to capture mouse");
 			vidc_framecount = 0;
 			if (!fullscreen) SetWindowText(ghwnd, s);
 			updatemips=0;
