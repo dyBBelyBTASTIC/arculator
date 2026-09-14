@@ -288,9 +288,20 @@ void mainthread(LPVOID param)
 
 			if (altenter_now && !altenter_down)
 			{
-				MessageBox(NULL, "Alt+Enter was detected!", "Diagnostic", MB_OK);
-				if (!fullscreen)
+				if (fullscreen)
+				{
+					mouse_capture_disable();
+					SDL_SetWindowFullscreen(sdl_main_window, 0);
+					SetMenu(ghwnd, menu);
+
+					fullscreen=0;
+					if (fullborders) updatewindowsize(800,600);
+					else             updatewindowsize(672,544);
+				}
+				else
+				{
 					win_dofullscreen = 1;
+				}
 			}
 			altenter_down = altenter_now;
 		}
