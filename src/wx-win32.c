@@ -261,37 +261,37 @@ void mainthread(LPVOID param)
 			}
 		}
 
-if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END])
-{
-    if (fullscreen)
-    {
-        mouse_capture_disable();
-        SDL_SetWindowFullscreen(sdl_main_window, 0);
-        SetMenu(ghwnd, menu);
+		if ((key[KEY_LCONTROL] || key[KEY_RCONTROL]) && key[KEY_END])
+		{
+			if (fullscreen)
+			{
+				mouse_capture_disable();
+				SDL_SetWindowFullscreen(sdl_main_window, 0);
+				SetMenu(ghwnd, menu);
 
-        fullscreen=0;
-        if (fullborders) updatewindowsize(800,600);
-        else             updatewindowsize(672,544);
-    }
-    else if (mousecapture)
-    {
-        ClipCursor(&oldclip);
-        mouse_capture_disable();
-        mousecapture = 0;
-        updatemips = 1;
-    }
-}
+				fullscreen=0;
+				if (fullborders) updatewindowsize(800,600);
+				else             updatewindowsize(672,544);
+			}
+			else if (mousecapture)
+			{
+				ClipCursor(&oldclip);
+				mouse_capture_disable();
+				mousecapture = 0;
+				updatemips = 1;
+			}
+		}
 
-{
-    static int altenter_down = 0;
-    int altenter_now = (key[KEY_ALT] || key[KEY_ALTGR]) && key[KEY_ENTER];
+		{
+			static int altenter_down = 0;
+			int altenter_now = (key[KEY_ALT] || key[KEY_ALTGR]) && key[KEY_ENTER];
 
-    if (altenter_now && !altenter_down && !fullscreen)
-    {
-        win_dofullscreen = 1;
-    }
-    altenter_down = altenter_now;
-}
+			if (altenter_now && !altenter_down && !fullscreen)
+			{
+				win_dofullscreen = 1;
+			}
+			altenter_down = altenter_now;
+		}
 
 		if (updatemips)
 		{
@@ -465,6 +465,14 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 {
 	switch (message)                  /* handle the messages */
 	{
+		case WM_SYSCOMMAND:
+		/* Suppress Windows' default "Alt activates the menu bar" behavior,
+		   which otherwise intercepts Alt-based shortcuts (e.g. Alt+Enter)
+		   before they reach the emulator's own keyboard handling. */
+		if ((wParam & 0xFFF0) == SC_KEYMENU)
+			return 0;
+		break;
+
 		case WM_CREATE:
 		SetTimer(hwnd, TIMER_1SEC, 1000, NULL);
 		break;
