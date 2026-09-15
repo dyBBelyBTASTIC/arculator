@@ -204,8 +204,13 @@ int arc_init()
 
 	for (c=0;c<4;c++)
 	{
-		sprintf(s,"disc_name_%i",c);
-		p = (char *)config_get_string(CFG_MACHINE, NULL,s,NULL);
+		if (c < 3 && cmdline_discname[c][0])
+			p = cmdline_discname[c];
+		else
+		{
+			sprintf(s,"disc_name_%i",c);
+			p = (char *)config_get_string(CFG_MACHINE, NULL,s,NULL);
+		}
 		if (p) {
 		   disc_close(c);
 		   strcpy(discname[c], p);

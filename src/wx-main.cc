@@ -33,7 +33,16 @@ int main(int argc, char **argv)
 	for (int i = 1; i < argc; i++)
 	{
 		if (!strcmp(argv[i], "-fullscreen"))
+		{
 			cmdline_fullscreen = 1;
+		}
+		else if ((!strcmp(argv[i], "-d0") || !strcmp(argv[i], "-d1") || !strcmp(argv[i], "-d2")) && (i + 1) < argc)
+		{
+			int drive = argv[i][2] - '0';
+			strncpy(cmdline_discname[drive], argv[i + 1], 511);
+			cmdline_discname[drive][511] = 0;
+			i++;
+		}
 		else
 			new_argv[new_argc++] = argv[i];
 	}

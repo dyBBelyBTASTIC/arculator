@@ -96,6 +96,7 @@ char config_name[256];
 char machine_config_name[256];
 char machine_config_file[256];
 int cmdline_fullscreen = 0;
+char cmdline_discname[3][512] = { "", "", "" };
 
 static char config_file[256];
 
