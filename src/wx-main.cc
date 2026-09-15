@@ -25,6 +25,21 @@ int main(int argc, char **argv)
 	char *p = (char *)get_filename(exname);
 	*p = 0;
 
+	/* Scan for -fullscreen and strip it out of argv so it isn't mistaken
+	   for a machine configuration name. */
+	int new_argc = 1;
+	char **new_argv = (char **)malloc(argc * sizeof(char *));
+	new_argv[0] = argv[0];
+	for (int i = 1; i < argc; i++)
+	{
+		if (!strcmp(argv[i], "-fullscreen"))
+			cmdline_fullscreen = 1;
+		else
+			new_argv[new_argc++] = argv[i];
+	}
+	argc = new_argc;
+	argv = new_argv;
+
 	if(argc > 1)
 	{
 		wxString config_path = GetConfigPath(argv[1]);

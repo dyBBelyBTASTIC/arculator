@@ -146,6 +146,8 @@ void Frame::Start()
 	if (strlen(machine_config_name) != 0 || !ShowConfigSelection())
 	{
 		arc_start_main_thread(this, this->menu);
+		if (cmdline_fullscreen)
+			arc_enter_fullscreen();
 #if defined(__APPLE__) && !defined(UI_WX)
 		/* The SDL loop runs on the macOS main thread and returns on quit. */
 		Quit(0);

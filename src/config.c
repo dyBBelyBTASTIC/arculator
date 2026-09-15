@@ -95,6 +95,7 @@ char config_file_default[256];
 char config_name[256];
 char machine_config_name[256];
 char machine_config_file[256];
+int cmdline_fullscreen = 0;
 
 static char config_file[256];
 
